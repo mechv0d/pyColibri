@@ -19,6 +19,9 @@ class AuthViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
     lookup_field = 'phonenum'
 
+    def get_queryset(self):
+        return Client.objects.all()
+
 
 class ProfileViewSet(viewsets.ModelViewSet):
     queryset = PycolibriProfile.objects.all()

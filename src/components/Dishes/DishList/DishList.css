@@ -1,0 +1,11 @@
+.dish-list {
+    box-sizing: border-box;
+    width: var(--web-page-max-width);
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 24px 80px;
+    padding: 24px;
+
+}

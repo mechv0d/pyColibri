@@ -1,0 +1,43 @@
+.nav-rail {
+    width: 84px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    padding: 44px 0 56px 0;
+
+    --md-icon-button-size: 48px;
+}
+
+.nav-rail-menu {
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 0;
+}
+
+.nav-rail-menu-btn {
+    width: 48px;
+    height: 48px;
+}
+
+.nav-rail-destinations {
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    padding: 0;
+}
+
+.nav-rail-dest-btn {
+    min-width: 70px;
+    height: 32px;
+    min-height: 32px;
+}

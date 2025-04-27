@@ -1,0 +1,18 @@
+.add-dish {
+    background-color: var(--md-sys-color-tertiary-container);
+    cursor: pointer;
+
+}
+
+.add-dish .transparent {
+    background-color: transparent;
+}
+
+.add-dish .plus-icon {
+    --md-icon-size: 24px;
+    color: var(--md-sys-color-on-tertiary-fixed-variant);
+}
+
+.add-dish .text {
+    color: var(--md-sys-color-on-tertiary-fixed-variant) !important;
+}

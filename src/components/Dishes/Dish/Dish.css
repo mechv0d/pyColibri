@@ -1,0 +1,90 @@
+.dish {
+    width: 420px;
+    height: 80px;
+    display: flex;
+    box-sizing: border-box;
+    flex-direction: row;
+    gap: 0;
+    padding: 0;
+    align-items: center;
+    background-color: var(--md-sys-color-surface-container-lowest);
+    border-radius: 12px;
+
+    -webkit-box-shadow: 0 4px 8px 0 rgba(34, 60, 80, 0.2);
+    -moz-box-shadow: 0 4px 8px 0 rgba(34, 60, 80, 0.2);
+    box-shadow: 0 4px 8px 0 rgba(34, 60, 80, 0.2);
+}
+
+.dish .dish-content {
+    width: 100%;
+    height: 100%;
+    max-width: 300px;
+    display: flex;
+    box-sizing: border-box;
+    flex-direction: row;
+    gap: 16px;
+    padding: 16px;
+    align-items: center;
+}
+
+.dish .dish-content .ccal-text {
+    width: fit-content;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    justify-content: center;
+    align-items: end;
+    gap: 4px;
+    padding: 0;
+
+    color: var(--md-sys-color-on-surface);
+}
+
+.dish .dish-content .ccal-text .text {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 11px;
+    letter-spacing: 0;
+}
+
+.dish .dish-content .ccal-text .text.small {
+    line-height: 8px;
+    font-size: 12px;
+    text-align: end;
+}
+
+.dish .dish-content .text {
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 0;
+
+    color: var(--md-sys-color-on-surface);
+}
+
+.dish .dish-content .text .header {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    letter-spacing: .015em;
+}
+
+.dish .dish-content .text .subhead {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    letter-spacing: .025em;
+}
+
+.dish .media {
+    width: 120px;
+    height: 100%;
+    display: block;
+    background-color: rgba(128, 128, 128, 0.49);
+    border-radius: 0 12px 12px 0;
+
+    text-align: center;
+}

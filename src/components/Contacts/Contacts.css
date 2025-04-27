@@ -1,0 +1,50 @@
+.media-body {
+    width: 100%;
+    max-width: var(--web-page-max-width);
+    box-sizing: border-box;
+    height: fit-content;
+    display: flex;
+    flex-direction: row;
+    gap: 34px;
+    padding: 14px 24px 6px 24px;
+}
+
+.media-body svg {
+    stroke: var(--md-sys-color-on-surface) !important;
+}
+
+.media-body span {
+    width: fit-content;
+    height: fit-content;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+    letter-spacing: .01em;
+}
+
+.media-body.contacts {
+    gap: 64px;
+    padding: 26px 144px 6px 24px;
+}
+
+.media-body.contacts div {
+    width: 100%;
+    box-sizing: border-box;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.media-body.contacts span {
+    width: 100%;
+    box-sizing: border-box;
+    height: fit-content;
+
+
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1.4;
+    letter-spacing: .025em;
+    text-align: center;
+}

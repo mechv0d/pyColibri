@@ -1,0 +1,5 @@
+a.media-wrapper:active, /* активная/посещенная ссылка */
+a.media-wrapper:hover,  /* при наведении */
+a.media-wrapper {
+    text-decoration: none;
+}

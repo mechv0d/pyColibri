@@ -7,9 +7,13 @@ from .models import (
 
 
 class AuthSerializer(serializers.ModelSerializer):
+    # id = serializers.PrimaryKeyRelatedField(
+    #     queryset=Client.objects.all(),
+    #     required=True
+    # )
     class Meta:
         model = Client
-        fields = ['id', 'phonecode', 'phonenum', 'name']
+        fields = '__all__'
         extra_kwargs = {
             'phonenum': {'validators': []},
         }

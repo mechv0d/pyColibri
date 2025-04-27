@@ -1,0 +1,16 @@
+.dish-frame {
+    width: fit-content;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 0;
+}
+
+.dish-frame .time {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    min-height: 20px;
+    letter-spacing: .01em;
+}
