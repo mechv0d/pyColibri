@@ -1,42 +1,49 @@
 from rest_framework import serializers
-from .models import User, Profile, Dish, Meal, Portion, WeightResult, Feedback, BlogPost
+from .models import (
+    Client, PycolibriProfile, PycolibriDish,
+    PycolibriMeal, PycolibriPortion, PycolibriIntermediateResult,
+    PycolibriFeedback, PycolibriBlogContent, PycolibriIrStatisticItem
+)
 
 
-class UserSerializer(serializers.ModelSerializer):
+class AuthSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = ['id', 'phone_code', 'phone_num', 'first_name', 'last_name']
+        model = Client
+        fields = ['id', 'phonecode', 'phonenum', 'name']
         extra_kwargs = {
-            'phone_num': {'validators': []},  # Отключаем проверку уникальности при обновлении
+            'phonenum': {'validators': []},
         }
 
 
 class ProfileSerializer(serializers.ModelSerializer):
+    uid = serializers.PrimaryKeyRelatedField(
+        queryset=Client.objects.all(),
+        required=True
+    )
+
     class Meta:
-        model = Profile
+        model = PycolibriProfile
         fields = '__all__'
-        read_only_fields = ['user']
 
 
 class DishSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Dish
+        model = PycolibriDish
         fields = '__all__'
-        read_only_fields = ['user']
 
 
 class MealSerializer(serializers.ModelSerializer):
     total_calories = serializers.SerializerMethodField()
 
     class Meta:
-        model = Meal
+        model = PycolibriMeal
         fields = '__all__'
-        read_only_fields = ['user']
+        # read_only_fields = ['uid']
 
     def get_total_calories(self, obj):
         return sum(
-            portion.dish.calories * portion.weight / 100
-            for portion in obj.portions.all()
+            portion.dish.ev_cal * portion.weight / 100
+            for portion in obj.pycolibriportion_set.all()
         )
 
 
@@ -44,26 +51,32 @@ class PortionSerializer(serializers.ModelSerializer):
     dish_details = DishSerializer(source='dish', read_only=True)
 
     class Meta:
-        model = Portion
+        model = PycolibriPortion
         fields = '__all__'
-        read_only_fields = ['meal']
+        # read_only_fields = ['meal']
 
 
 class WeightResultSerializer(serializers.ModelSerializer):
     class Meta:
-        model = WeightResult
+        model = PycolibriIntermediateResult
         fields = '__all__'
-        read_only_fields = ['user']
+        # read_only_fields = ['uid']
 
 
 class FeedbackSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Feedback
+        model = PycolibriFeedback
         fields = '__all__'
-        read_only_fields = ['user', 'sent_at']
+        # read_only_fields = ['uid', 'send_time']
 
 
 class BlogPostSerializer(serializers.ModelSerializer):
     class Meta:
-        model = BlogPost
+        model = PycolibriBlogContent
+        fields = '__all__'
+
+
+class StatisticItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PycolibriIrStatisticItem
         fields = '__all__'

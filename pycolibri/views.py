@@ -1,38 +1,36 @@
-from rest_framework import viewsets, permissions, status
-from rest_framework.response import Response
-from rest_framework.decorators import action
-from django.shortcuts import get_object_or_404
-from .models import User, Profile, Dish, Meal, Portion, WeightResult, Feedback, BlogPost
+from rest_framework import viewsets, permissions
+from rest_framework.exceptions import ValidationError
+
+from .models import (
+    Client, PycolibriProfile, PycolibriDish,
+    PycolibriMeal, PycolibriPortion, PycolibriIntermediateResult,
+    PycolibriFeedback, PycolibriBlogContent
+)
 from .serializers import (
-    UserSerializer, ProfileSerializer, DishSerializer,
+    AuthSerializer, ProfileSerializer, DishSerializer,
     MealSerializer, PortionSerializer, WeightResultSerializer,
     FeedbackSerializer, BlogPostSerializer
 )
 
 
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+class AuthViewSet(viewsets.ModelViewSet):
+    queryset = Client.objects.all()
+    serializer_class = AuthSerializer
     permission_classes = [permissions.AllowAny]
-
-    @action(detail=False, methods=['post'])
-    def register(self, request):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    lookup_field = 'phonenum'
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
-    queryset = Profile.objects.all()
+    queryset = PycolibriProfile.objects.all()
     serializer_class = ProfileSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    def get_object(self):
-        return get_object_or_404(Profile, user=self.request.user)
-
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        # Вручную проверяем, что переданный uid существует
+        uid = serializer.validated_data.get('uid')
+        if not Client.objects.filter(pk=uid.id).exists():
+            raise ValidationError("Client with this ID does not exist")
+        serializer.save()
 
 
 class DishViewSet(viewsets.ModelViewSet):
@@ -40,16 +38,11 @@ class DishViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return Dish.objects.filter(user=self.request.user)
+        return PycolibriDish.objects.all()
+        # return PycolibriDish.objects.filter(uid=self.request.user.client)
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
-
-    @action(detail=False)
-    def mine(self, request):
-        queryset = self.filter_queryset(self.get_queryset())
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+        serializer.save(uid=serializer.validated_data.get('uid'))
 
 
 class MealViewSet(viewsets.ModelViewSet):
@@ -57,18 +50,10 @@ class MealViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return Meal.objects.filter(user=self.request.user).order_by('-datetime')
+        return PycolibriMeal.objects.all()
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
-
-    @action(detail=True, methods=['post'])
-    def add_portion(self, request, pk=None):
-        meal = self.get_object()
-        serializer = PortionSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save(meal=meal)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        serializer.save(uid=serializer.validated_data.get('uid'))
 
 
 class PortionViewSet(viewsets.ModelViewSet):
@@ -76,12 +61,16 @@ class PortionViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return Portion.objects.filter(meal__user=self.request.user)
+        return PycolibriPortion.objects.all()
+
+    def perform_create(self, serializer):
+        serializer.save(meal_id=serializer.validated_data.get('meal_id'),
+                        dish_id=serializer.validated_data.get('dish_id'))
 
     def perform_destroy(self, instance):
         meal = instance.meal
         instance.delete()
-        meal.save()  # Обновим калории приёма пищи
+        meal.save()
 
 
 class WeightResultViewSet(viewsets.ModelViewSet):
@@ -89,10 +78,10 @@ class WeightResultViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return WeightResult.objects.filter(user=self.request.user).order_by('-date')
+        return PycolibriIntermediateResult.objects.all()
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        serializer.save(uid=serializer.validated_data.get('uid'))
 
 
 class FeedbackViewSet(viewsets.ModelViewSet):
@@ -100,14 +89,14 @@ class FeedbackViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return Feedback.objects.filter(user=self.request.user).order_by('-sent_at')
+        return PycolibriFeedback.objects.all()
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        serializer.save(uid=serializer.validated_data.get('uid'))
 
 
 class BlogPostViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = BlogPost.objects.all()
+    queryset = PycolibriBlogContent.objects.all()
     serializer_class = BlogPostSerializer
     permission_classes = [permissions.AllowAny]
     lookup_field = 'url'

@@ -2,97 +2,129 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 
+class Client(models.Model):
+    phonecode = models.CharField(max_length=3)
+    phonenum = models.CharField(max_length=10, unique=True)
+    name = models.CharField(max_length=64)
+
+    class Meta:
+        db_table = 'pycolibri_auth'
+
+
 class User(AbstractUser):
-    phone_code = models.CharField(max_length=3)
-    phone_num = models.CharField(max_length=10, unique=True)
-
-    # Отключаем неиспользуемые поля стандартной пользовательской модели
-    username = None
-    email = None
-
-    USERNAME_FIELD = 'phone_num'
-    REQUIRED_FIELDS = ['phone_code', 'first_name']
-
     class Meta:
-        verbose_name = 'Пользователь'
-        verbose_name_plural = 'Пользователи'
+        db_table = 'auth_user'
 
 
-class Profile(models.Model):
-    GENDER_CHOICES = [
-        (True, 'Мужской'),
-        (False, 'Женский'),
-    ]
-
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+class PycolibriProfile(models.Model):
     birthdate = models.DateField()
-    height = models.PositiveIntegerField()  # в см
-    weight = models.DecimalField(max_digits=5, decimal_places=2)  # в кг
-    gender = models.BooleanField(choices=GENDER_CHOICES)
+    height = models.IntegerField()
+    weight = models.DecimalField(max_digits=5, decimal_places=2)
+    gender = models.BooleanField()
+    uid = models.OneToOneField(
+        Client,
+        on_delete=models.CASCADE,
+        db_column='uid',
+        primary_key=True
+    )
 
     class Meta:
+        db_table = 'pycolibri_profile'
         verbose_name = 'Профиль'
         verbose_name_plural = 'Профили'
 
 
-class Dish(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='dishes')
-    name = models.CharField(max_length=255)
-    photo = models.ImageField(upload_to='dishes/', null=True, blank=True)
-    description = models.TextField(blank=True)
-    calories = models.PositiveIntegerField()  # ккал
-    fats = models.DecimalField(max_digits=4, decimal_places=1)  # г
-    proteins = models.DecimalField(max_digits=4, decimal_places=1)  # г
-    carbohydrates = models.DecimalField(max_digits=4, decimal_places=1)  # г
+class PycolibriDish(models.Model):
+    name = models.TextField()
+    photo = models.CharField(max_length=32, blank=True, null=True)
+    descr = models.TextField()
+    ev_cal = models.IntegerField()
+    ev_fats = models.DecimalField(max_digits=4, decimal_places=1)
+    ev_proteins = models.DecimalField(max_digits=4, decimal_places=1)
+    ev_carbohydrates = models.DecimalField(max_digits=4, decimal_places=1)
+    uid = models.ForeignKey(
+        Client,
+        on_delete=models.CASCADE,
+        db_column='uid'
+    )
 
     class Meta:
+        db_table = 'pycolibri_dish'
         verbose_name = 'Блюдо'
         verbose_name_plural = 'Блюда'
-        ordering = ['name']
 
 
-class Meal(models.Model):
-    MEAL_TYPES = [
-        ('breakfast', 'Завтрак'),
-        ('lunch', 'Обед'),
-        ('dinner', 'Ужин'),
-        ('snack', 'Перекус'),
-    ]
-
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='meals')
-    meal_type = models.CharField(max_length=10, choices=MEAL_TYPES)
-    datetime = models.DateTimeField()
-    notes = models.TextField(blank=True)
+class PycolibriMeal(models.Model):
+    meal_datetime = models.DateTimeField()
+    extra_name = models.CharField(max_length=50, blank=True, null=True)
+    extra_weight = models.IntegerField(blank=True, null=True)
+    extra_ev_cal = models.IntegerField(blank=True, null=True)
+    extra_ev_fats = models.DecimalField(
+        max_digits=4,
+        decimal_places=1,
+        blank=True,
+        null=True
+    )
+    extra_ev_proteins = models.DecimalField(
+        max_digits=4,
+        decimal_places=1,
+        blank=True,
+        null=True
+    )
+    extra_ev_carbohydrates = models.DecimalField(
+        max_digits=4,
+        decimal_places=1,
+        blank=True,
+        null=True
+    )
+    uid = models.ForeignKey(
+        Client,
+        on_delete=models.CASCADE,
+        db_column='uid'
+    )
 
     class Meta:
+        db_table = 'pycolibri_meal'
         verbose_name = 'Приём пищи'
         verbose_name_plural = 'Приёмы пищи'
-        ordering = ['-datetime']
 
 
-class Portion(models.Model):
-    meal = models.ForeignKey(Meal, on_delete=models.CASCADE, related_name='portions')
-    dish = models.ForeignKey(Dish, on_delete=models.CASCADE)
-    weight = models.PositiveIntegerField()  # в граммах
+class PycolibriPortion(models.Model):
+    meal = models.ForeignKey(
+        PycolibriMeal,
+        on_delete=models.CASCADE,
+        db_column='meal_id'
+    )
+    dish = models.ForeignKey(
+        PycolibriDish,
+        on_delete=models.CASCADE,
+        db_column='dish_id'
+    )
+    weight = models.IntegerField()
 
     class Meta:
+        db_table = 'pycolibri_portion'
         verbose_name = 'Порция'
         verbose_name_plural = 'Порции'
 
 
-class WeightResult(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='weight_results')
+class PycolibriIntermediateResult(models.Model):
     date = models.DateField()
-    weight = models.DecimalField(max_digits=5, decimal_places=2)  # в кг
+    weight = models.DecimalField(max_digits=5, decimal_places=2)
+    uid = models.ForeignKey(
+        Client,
+        on_delete=models.CASCADE,
+        db_column='uid'
+    )
 
     class Meta:
+        db_table = 'pycolibri_intermediate_result'
         verbose_name = 'Замер веса'
         verbose_name_plural = 'Замеры веса'
-        ordering = ['-date']
-        unique_together = ['user', 'date']
+        unique_together = ('uid', 'date')
 
 
-class Feedback(models.Model):
+class PycolibriFeedback(models.Model):
     STATUS_CHOICES = [
         (0, 'Новое'),
         (1, 'В обработке'),
@@ -100,27 +132,44 @@ class Feedback(models.Model):
         (3, 'Отклонено'),
     ]
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='feedbacks')
-    email = models.EmailField()
+    email = models.CharField(max_length=100)
     message = models.TextField()
-    sent_at = models.DateTimeField(auto_now_add=True)
+    send_time = models.DateTimeField()
     status = models.IntegerField(choices=STATUS_CHOICES, default=0)
+    uid = models.ForeignKey(
+        Client,
+        on_delete=models.CASCADE,
+        db_column='uid'
+    )
 
     class Meta:
+        db_table = 'pycolibri_feedback'
         verbose_name = 'Обратная связь'
         verbose_name_plural = 'Обратная связь'
-        ordering = ['-sent_at']
 
 
-class BlogPost(models.Model):
-    title = models.CharField(max_length=255)
-    content = models.TextField()
-    photo = models.ImageField(upload_to='blog/', null=True, blank=True)
-    url = models.SlugField(unique=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+class PycolibriBlogContent(models.Model):
+    size = models.IntegerField()
+    title = models.TextField()
+    photo = models.CharField(max_length=32)
+    url = models.TextField(unique=True)
 
     class Meta:
+        db_table = 'pycolibri_blog_content'
         verbose_name = 'Запись блога'
         verbose_name_plural = 'Записи блога'
-        ordering = ['-created_at']
+
+
+class PycolibriIrStatisticItem(models.Model):
+    text = models.TextField()
+    is_red = models.BooleanField(default=False)
+    rid = models.ForeignKey(
+        PycolibriIntermediateResult,
+        on_delete=models.CASCADE,
+        db_column='rid'
+    )
+
+    class Meta:
+        db_table = 'pycolibri_ir_statistic_item'
+        verbose_name = 'Статистика замеров'
+        verbose_name_plural = 'Статистика замеров'
