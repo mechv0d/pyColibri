@@ -53,6 +53,7 @@ class MealSerializer(serializers.ModelSerializer):
 
 class PortionSerializer(serializers.ModelSerializer):
     dish_details = DishSerializer(source='dish', read_only=True)
+    meal_details = MealSerializer(source='meal', read_only=True)
 
     class Meta:
         model = PycolibriPortion
@@ -77,6 +78,12 @@ class FeedbackSerializer(serializers.ModelSerializer):
 class BlogPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = PycolibriBlogContent
+        fields = '__all__'
+
+
+class IntermediateResultSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PycolibriIntermediateResult
         fields = '__all__'
 
 

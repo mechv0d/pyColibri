@@ -4,7 +4,9 @@ import {mdiPlus} from '@mdi/js';
 
 export default function AddDishButton() {
     return <>
-        <div className="dish add-dish">
+        <div className="dish add-dish" onClick={() => {
+            location.replace('/create-meal')
+        }}>
             <div className="dish-content">
                 <div className="ccal-text">
                     <md-icon className="plus-icon">

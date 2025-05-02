@@ -9,7 +9,7 @@ from .models import (
 from .serializers import (
     AuthSerializer, ProfileSerializer, DishSerializer,
     MealSerializer, PortionSerializer, WeightResultSerializer,
-    FeedbackSerializer, BlogPostSerializer
+    FeedbackSerializer, BlogPostSerializer, IntermediateResultSerializer
 )
 
 
@@ -67,8 +67,11 @@ class PortionViewSet(viewsets.ModelViewSet):
         return PycolibriPortion.objects.all()
 
     def perform_create(self, serializer):
-        serializer.save(meal_id=serializer.validated_data.get('meal_id'),
-                        dish_id=serializer.validated_data.get('dish_id'))
+        mid = serializer.validated_data.get('meal')
+        did = serializer.validated_data.get('dish')
+        print(mid, did)
+        serializer.save(meal_id=mid.id,
+                        dish_id=did.id)
 
     def perform_destroy(self, instance):
         meal = instance.meal
@@ -103,3 +106,16 @@ class BlogPostViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = BlogPostSerializer
     permission_classes = [permissions.AllowAny]
     lookup_field = 'url'
+
+
+class IntermediateResultViewSet(viewsets.ModelViewSet):
+    queryset = PycolibriIntermediateResult.objects.all()
+    serializer_class = IntermediateResultSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer):
+        # Вручную проверяем, что переданный uid существует
+        uid = serializer.validated_data.get('uid')
+        if not Client.objects.filter(pk=uid.id).exists():
+            raise ValidationError("Client with this ID does not exist")
+        serializer.save()

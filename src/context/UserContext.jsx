@@ -8,8 +8,16 @@ export const UserProvider = ({children}) => {
         if (savedUser) {
             let parsed = JSON.parse(savedUser)
             parsed.token = localStorage.getItem('authToken');
+            // Добавляем временную зону по умолчанию
+            parsed.timezone = parsed.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone;
             return parsed;
-        } else return {id: null, phone: null, name: null, token: null};
+        } else return {
+            id: null,
+            phone: null,
+            name: null,
+            token: null,
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+        };
     });
 
     const [isAuth, setIsAuth] = useState(() => {
@@ -20,7 +28,9 @@ export const UserProvider = ({children}) => {
         const newUser = {
             id: userData.id,
             phone: userData.phone,
-            name: userData.name
+            name: userData.name,
+            // Сохраняем временную зону при логине
+            timezone: userData.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone
         };
         setUser(newUser);
         setIsAuth(true);

@@ -24,6 +24,7 @@ export default function Profile() {
         if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
             age--;
         }
+
         return age;
     };
 
@@ -109,7 +110,7 @@ export default function Profile() {
                 {age && (
                     <div style={{marginBottom: '10px'}}>
                         <span style={{fontWeight: 'bold'}}>Возраст: </span>
-                        <span>{age} лет</span>
+                        <span>{age} г.</span>
                     </div>
                 )}
                 <div style={{marginBottom: '10px'}}>

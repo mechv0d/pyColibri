@@ -1,0 +1,56 @@
+/* Основные стили формы */
+.base-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    padding: 16px;
+    width: auto;
+    margin: 0 auto;
+}
+
+.base-form md-outlined-text-field {
+    max-width: 250px;
+}
+
+/* Стили для отображения изменения веса */
+.weight-change {
+    padding: 12px;
+    border-radius: 12px;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.weight-change.positive {
+    background-color: var(--md-sys-color-tertiary-container);
+    color: var(--md-sys-color-on-tertiary-container);
+}
+
+.weight-change.negative {
+    background-color: var(--md-sys-color-primary-container);
+    color: var(--md-sys-color-on-primary-container);
+}
+
+.weight-change.neutral {
+    background-color: var(--md-sys-color-surface-container-highest);
+    color: var(--md-sys-color-on-surface);
+}
+
+/* Сообщения об ошибках и успехе */
+.error-message {
+    color: var(--md-sys-color-error);
+    padding: 8px;
+    text-align: center;
+}
+
+.success-message {
+    color: var(--md-sys-color-primary);
+    padding: 8px;
+    text-align: center;
+}
+
+md-filled-button {
+    margin-top: 16px;
+}

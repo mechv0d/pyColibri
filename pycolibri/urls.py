@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 from .views import (
     AuthViewSet, ProfileViewSet, DishViewSet,
     MealViewSet, PortionViewSet, WeightResultViewSet,
-    FeedbackViewSet, BlogPostViewSet
+    FeedbackViewSet, BlogPostViewSet, IntermediateResultViewSet
 )
 
 router = DefaultRouter()
@@ -15,6 +15,7 @@ router.register(r'portions', PortionViewSet, basename='portion')
 router.register(r'weights', WeightResultViewSet, basename='weight')
 router.register(r'feedback', FeedbackViewSet, basename='feedback')
 router.register(r'blog', BlogPostViewSet, basename='blog')
+router.register(r'results', IntermediateResultViewSet, basename='result')
 
 urlpatterns = [
     path('', include(router.urls)),

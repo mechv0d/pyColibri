@@ -1,0 +1,90 @@
+/* Основные стили формы */
+.base-form {
+    width: 450px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 16px;
+}
+
+/* Стили для ввода времени и даты */
+.time-inputs {
+    display: flex;
+    gap: 16px;
+}
+
+.time-inputs > div {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.date-input {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Стили списка блюд */
+.dishes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 8px;
+    -webkit-mask: var(--mask);
+    mask: var(--mask);
+
+    --mask: linear-gradient(to bottom,
+    rgba(0,0,0, 1) 0,   rgba(0,0,0, 1) 90%,
+    rgba(0,0,0, 0) 100%, rgba(0,0,0, 0) 0
+    ) 100% 50% / 100% 100% repeat-x;
+}
+
+.dish-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px;
+    border-radius: 12px;
+    background: var(--md-sys-color-surface-container-low);
+}
+
+.dish-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.dish-name {
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.dish-calories {
+    font-size: 0.875rem;
+    color: var(--md-sys-color-primary);
+}
+
+.dish-descr {
+    font-size: 0.75rem;
+    color: var(--md-sys-color-on-surface-variant);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-wrap: wrap;
+}
+
+.dish-weight {
+    width: 100px;
+}
+
+/* Сообщения об ошибках */
+.error-message {
+    color: var(--md-sys-color-error);
+    margin: 0;
+    padding: 8px 0;
+}

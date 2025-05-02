@@ -111,9 +111,9 @@ function NavRail() {
                     )}
                 </md-menu>
                 <DestinationButton title="Главная" icon={mdiHome} href={"/"}/>
-                <DestinationButton title="Трекер" icon={mdiHeartPulse}/>
-                <DestinationButton title="Блюда" icon={mdiFoodApple}/>
-                <DestinationButton title="Питание" icon={mdiFoodVariant}/>
+                <DestinationButton title="Трекер" icon={mdiHeartPulse} href={"/create-result"}/>
+                <DestinationButton title="Блюда" icon={mdiFoodApple} href={"/create-dish"}/>
+                <DestinationButton title="Питание" icon={mdiFoodVariant} href={"/create-meal"}/>
             </div>
         </div>
     </>

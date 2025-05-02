@@ -12,6 +12,9 @@ import FillProfile from "./routes/fill-profile.jsx";
 import Auth from "./routes/auth.jsx";
 import {UserProvider} from "./context/UserContext.jsx";
 import Profile from "./routes/profile.jsx";
+import CreateDish from "./routes/create_dish.jsx";
+import CreateMeal from "./routes/create_meal.jsx";
+import CreateResult from "./routes/create_result.jsx";
 
 const router = createBrowserRouter([
     {
@@ -47,6 +50,19 @@ const router = createBrowserRouter([
     {
         path: "/profile",
         element: <Profile/>,
+    },
+    {
+        path: "/create-dish",
+        element: <CreateDish/>,
+    },
+    {
+        path: "/create-meal",
+        element: <CreateMeal/>,
+    }
+    ,
+    {
+        path: "/create-result",
+        element: <CreateResult/>,
     }
 ]);
 
