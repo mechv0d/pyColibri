@@ -136,7 +136,7 @@ export default function CreateResult() {
                 {weightChange && (
                     <div
                         className={`weight-change ${weightChange.isZero ? 'neutral' : weightChange.isPositive ? 'positive' : 'negative'}`}>
-                        Изменения за 19 дней: {weightChange.isPositive ? '+' : ''}{weightChange.value} кг.
+                        Изменения: {weightChange.isPositive ? '+' : ''}{weightChange.value} кг.
                     </div>
                 )}
 
